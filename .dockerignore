@@ -1,0 +1,56 @@
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+*.egg-info
+dist
+build
+venv
+.venv
+ENV
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+
+# Project specific
+.env.local
+.env
+.ruff_cache
+package/
+*.zip
+function.zip
+function_small.zip
+python_layer.zip
+create_zip.py
+create_small_zip.py
+layer_correct.py
+make_layer.py
+create_layer.py
+upload_lambda.py
+
+# AWS
+.aws-sam/
+template.yaml.bak
+
+# Test / Docs
+response.json
+create-function.json
+update-env.json
+test_*.py
+*_test.py
+Lambda*.md
+
+# OS
+.DS_Store
+Thumbs.db

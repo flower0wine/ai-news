@@ -1,0 +1,46 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: AI News Lambda Function
+
+Globals:
+  Function:
+    Timeout: 300
+    MemorySize: 512
+
+Resources:
+  AiNewsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: ai-news
+      Handler: lambda_function.lambda_handler
+      Runtime: python3.12
+      CodeUri: ./
+      Description: AI News processing Lambda function
+      Timeout: 300
+      MemorySize: 512
+
+  # 每天北京时间 8 点触发 (UTC 0 点)
+  # cron(分钟 小时 日期 月份 星期 年)
+  # 北京时间 8:00 = UTC 0:00
+  AiNewsScheduler:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: Trigger AI News Lambda at 8 AM Beijing time daily
+      ScheduleExpression: cron(0 0 * * ? *)
+      Targets:
+        - Id: AiNewsFunction
+          Arn: !GetAtt AiNewsFunction.Arn
+
+  # 授权 EventBridge 调用 Lambda
+  PermissionForEventsToInvokeLambda:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref AiNewsFunction
+      Action: lambda:InvokeFunction
+      Principal: events.amazonaws.com
+      SourceArn: !GetAtt AiNewsScheduler.Arn
+
+Outputs:
+  AiNewsFunction:
+    Description: AI News Function ARN
+    Value: !GetAtt AiNewsFunction.Arn
